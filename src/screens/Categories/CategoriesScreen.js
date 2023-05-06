@@ -1,16 +1,18 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Text, View, Image, TouchableHighlight } from "react-native";
 import styles from "./styles";
-import { getNumberOfFurnitures } from "../../service/index";
 import MenuImage from "../../components/MenuImage/MenuImage";
-import { getCategories } from "../../service/index";
+import { getCategories, getFurnitures } from "../../service/index";
 
 export default function CategoriesScreen(props) {
   const { navigation } = props;
   const [categories, setCategories] = useState([]);
+  const [furnitures, setFurnitures] = useState([]);
 
-  useEffect(() => {
-    const data = getCategories();
+  useEffect(async () => {
+    const data = await getCategories();
+    const info = await getFurnitures();
+    setFurnitures(info)
     setCategories(data);
   }, []);
 
@@ -33,6 +35,17 @@ export default function CategoriesScreen(props) {
     });
   }, []);
 
+
+  const getNumberOfFurnitures =(categoryId) => {
+    let count = 0;
+    furnitures.map((data) => {
+      if (data.categoryId === categoryId) {
+        count++;
+      }
+    });
+    return count;
+  }
+
   const onPressCategory = (item) => {
     const title = item.name;
     const category = item;
@@ -51,7 +64,7 @@ export default function CategoriesScreen(props) {
         />
         <Text style={styles.categoriesName}>{item.name}</Text>
         <Text style={styles.categoriesInfo}>
-          {getNumberOfFurnitures(item.id)} muebles
+        {getNumberOfFurnitures(item.id)} muebles
         </Text>
       </View>
     </TouchableHighlight>

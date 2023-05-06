@@ -1,52 +1,81 @@
-import { furnitures, pieces, categories } from "../data/dataArrays";
+var api_url = 'http://localhost:3000'
 
-export function getFurnitures() {
-  return furnitures;
+export async function getFurnitures() {
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const response = await fetch(`${api_url}/furnitures`, requestOptions)
+  .then(response => response.json())
+  
+  return response
+}
+
+async function getPiece(id) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const response = await fetch(`${api_url}/pieces/${id}`, requestOptions)
+  .then(response => response.json())
+  
+  return response
 }
 
 export function getAllPieces(idArray) {
   const piecesArray = [];
-  idArray.map((index) => {
-    pieces.map((data) => {
-      if (data.id == index[0]) {
-        piecesArray.push([data, index[1]]);
-      }
-    });
+  idArray.map(async (item) => {
+    const piece = await getPiece(item);
+      piecesArray.push([piece, '#']);
   });
+
   return piecesArray;
 }
 
-export function getCategories() {
-  return categories;
+export async function getCategories() {
+const requestOptions = {
+  method: 'GET',
+  headers: { 'Content-Type': 'application/json' },
+};
+const response = await fetch(`${api_url}/categories`, requestOptions)
+.then(response => response.json())
+
+return response
 }
 
-export function getCategoriesName(categoryId) {
-  let categoryName = "";
-  categories.map((item) => {
-    if (item.id == categoryId) {
-      categoryName = item.name;
-    }
-  });
-
-  return categoryName;
+export async function getCategoriesName(categoryId) {
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+  
+  const response = await fetch(`${api_url}/categories/${categoryId}`, requestOptions)
+  .then(response => response.json())
+  
+  return response.name;
 }
 
-export function getNumberOfFurnitures(categoryId) {
+export async function getNumberOfFurnitures(categoryId) {
   let count = 0;
-  furnitures.map((data) => {
-    if (data.categoryId == categoryId) {
+  const dataFurnitures = await getFurnitures()
+
+  dataFurnitures.map((data) => {
+    if (data.categoryId === categoryId) {
       count++;
     }
   });
   return count;
 }
 
-export function getFurnituresbyCategory(categoryId) {
+export async function getFurnituresbyCategory(categoryId) {
   const furnituresArray = [];
-  furnitures.map((data) => {
-    if (data.categoryId == categoryId) {
+  const dataFurnitures = await getFurnitures();
+
+  dataFurnitures.map((data) => {
+    if (data.categoryId === categoryId) {
       furnituresArray.push(data);
     }
   });
+
   return furnituresArray;
 }

@@ -1,13 +1,21 @@
-import React, { useLayoutEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Text, View, Image, TouchableHighlight } from "react-native";
 import styles from "./styles";
 import { getAllPieces } from "../../service/index";
 
 export default function PiecesDetailsScreen(props) {
   const { navigation, route } = props;
-
+  const [piecesArray, setPiecesArray] = useState([])
   const item = route.params?.pieces;
-  const piecesArray = getAllPieces(item);
+
+  useEffect(()=> {
+    const loadData = async () => {
+      const data = await getAllPieces(item);
+      setPiecesArray(data);
+    }
+    
+    loadData();
+  },[])
 
   useLayoutEffect(() => {
     navigation.setOptions({

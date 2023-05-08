@@ -2,15 +2,22 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Text, View, TouchableHighlight, Image } from "react-native";
 import styles from "./styles";
 import MenuImage from "../../components/MenuImage/MenuImage";
-import { getFurnitures, getCategoriesName } from "../../service/index";
+import { getFurnitures, getCategories } from "../../service/index";
 
 export default function HomeScreen(props) {
   const { navigation } = props;
-  const [furnitures, setfurnitures] = useState([]);
-
+  const [furnitures, setFurnitures] = useState([]);
+  const [categories, setCategories] = useState([]);
+  
   useEffect(() => {
-    const data = getFurnitures();
-    setfurnitures(data);
+    const loadData = async () => {
+      const data = await getFurnitures();
+      const info = await getCategories();
+      setCategories(info)
+      setFurnitures(data);
+    }
+
+    loadData();
   }, []);
 
   useLayoutEffect(() => {
@@ -30,7 +37,13 @@ export default function HomeScreen(props) {
     navigation.navigate("furniture", { item });
   };
 
-  const renderFurnitures = ({ item }) => (
+  const getCategoriesName = (categoryId) => {
+  const category = categories.find((item) => item.id === categoryId)
+  return category.name
+}
+
+
+  const renderFurnitures = ({ item }) =>(
     <TouchableHighlight
       underlayColor="rgba(73,182,77,0.9)"
       onPress={() => onPressFurniture(item)}
@@ -39,7 +52,7 @@ export default function HomeScreen(props) {
         <Image style={styles.photo} source={{ uri: item.photo_url }} />
         <Text style={styles.title}>{item.name}</Text>
         <Text style={styles.category}>
-          {getCategoriesName(item.categoryId)}
+           {getCategoriesName(item.categoryId)}
         </Text>
       </View>
     </TouchableHighlight>

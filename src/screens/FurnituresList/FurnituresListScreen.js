@@ -13,11 +13,15 @@ export default function FurnituresListScreen(props) {
 
   const item = route?.params?.category;
 
-  useEffect(async () => {
-    const data = await getFurnituresbyCategory(item.id);
-    const info = await getCategories();
-    setCategories(info)
-    setFurnitures(data);
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await getFurnituresbyCategory(item.id);
+      const info = await getCategories();
+      setCategories(info)
+      setFurnitures(data);
+    }
+
+    loadData();
   }, []);
 
   useLayoutEffect(() => {

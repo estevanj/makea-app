@@ -8,9 +8,13 @@ export default function PiecesDetailsScreen(props) {
   const [piecesArray, setPiecesArray] = useState([])
   const item = route.params?.pieces;
 
-  useEffect(async ()=> {
-    const data = await getAllPieces(item);
-    setPiecesArray(data);
+  useEffect(()=> {
+    const loadData = async () => {
+      const data = await getAllPieces(item);
+      setPiecesArray(data);
+    }
+    
+    loadData();
   },[])
 
   useLayoutEffect(() => {

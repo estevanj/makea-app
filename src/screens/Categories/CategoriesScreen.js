@@ -9,11 +9,15 @@ export default function CategoriesScreen(props) {
   const [categories, setCategories] = useState([]);
   const [furnitures, setFurnitures] = useState([]);
 
-  useEffect(async () => {
-    const data = await getCategories();
-    const info = await getFurnitures();
-    setFurnitures(info)
-    setCategories(data);
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await getCategories();
+      const info = await getFurnitures();
+      setFurnitures(info)
+      setCategories(data);
+    }
+    
+    loadData();
   }, []);
 
   useLayoutEffect(() => {

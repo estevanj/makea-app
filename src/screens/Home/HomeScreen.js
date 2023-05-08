@@ -9,11 +9,15 @@ export default function HomeScreen(props) {
   const [furnitures, setFurnitures] = useState([]);
   const [categories, setCategories] = useState([]);
   
-  useEffect(async () => {
-    const data = await getFurnitures();
-    const info = await getCategories();
-    setCategories(info)
-    setFurnitures(data);
+  useEffect(() => {
+    const loadData = async () => {
+      const data = await getFurnitures();
+      const info = await getCategories();
+      setCategories(info)
+      setFurnitures(data);
+    }
+
+    loadData();
   }, []);
 
   useLayoutEffect(() => {

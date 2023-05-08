@@ -1,4 +1,5 @@
-var api_url = 'http://localhost:3000'
+//var api_url = 'http://localhost:3000'
+var api_url= 'https://makea-api.onrender.com'
 
 export async function getFurnitures() {
   const requestOptions = {
